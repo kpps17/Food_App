@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
-const {dbLink} = require("../secrets/links")
-
+const {dbLink} = require("../secrets/links");
+const validator = require("email-validator");
 // console.log(dbLink);
 
-mongoose.connect(db_link).then(function (db) {
+mongoose.connect(dbLink).then(function (db) {
     // console.log(db);
     console.log('db connected');
 })
