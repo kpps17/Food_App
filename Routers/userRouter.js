@@ -2,7 +2,9 @@ const express = require('express');
 const { userModel } = require('../models/userModel');
 const userRouter = express.Router();
 
-userRouter.route('/').get(async (req, res) => {
+let userLoggedIn = false;
+
+userRouter.route('/').get(protectRoute, async (req, res) => {
     try {
         let users = await userModel.find();
         if (users) {
@@ -18,5 +20,15 @@ userRouter.route('/').get(async (req, res) => {
         })
     }
 })
+
+function protectRoute(req, res, next) {
+    if(userLoggedIn) {
+        next();
+    } else {
+        return res.json({
+            message: "access denied",
+        })
+    }
+}
 
 module.exports = {userRouter};
