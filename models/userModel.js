@@ -35,20 +35,7 @@ const userSchema = new mongoose.Schema({
 		required: true,
 		min: 8
 	},
-	confirmPassword: {
-		type: String,
-		required: true,
-		min: 8,
-		validate: function () {
-			return this.password == this.confirmPassword
-		}
-	}
 });
 
-userSchema.pre('save', function () {
-	this.confirmPassword = undefined;
-})
-
 const userModel = mongoose.model('userModel', userSchema);
-
-module.exports = userModel;
+module.exports = {userModel};
