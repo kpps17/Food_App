@@ -1,4 +1,3 @@
-const { validate } = require('email-validator');
 const express = require('express');
 const authRouter = express.Router();
 const path = require('path')
@@ -44,6 +43,7 @@ async function loginUser(req, res) {
 			let user = await userModel.findOne({ email: req.body.email });
 			if (user) {
 				if (req.body.password == user.password) {
+					res.cookie('login', '1234', {httpOnly: true});
 					return res.json({
 						message: "user logged in",
 					})
