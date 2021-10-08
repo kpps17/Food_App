@@ -1,6 +1,8 @@
 const express = require('express');
 const { userModel } = require('../models/userModel');
 const userRouter = express.Router();
+const jwt = require('jsonwebtoken');
+const { JWT_KEY } = require('../secrets/links');
 
 userRouter.route('/').get(protectRoute, async (req, res) => {
     try {
@@ -21,8 +23,17 @@ userRouter.route('/').get(protectRoute, async (req, res) => {
 
 function protectRoute(req, res, next) {
     try {
-        if (req.cookies && req.cookies.login == '1234') {
-            next();
+        if (req.cookies.login) {
+            // console.log(req.cookies.login);
+            let isVerified = jwt.verify(req.cookies.login, JWT_KEY);
+            // console.log(isVerified);
+            if (isVerified) {
+                next();
+            } else {
+                return res.json({
+                    message: "access denied",
+                })
+            }
         } else {
             return res.json({
                 message: "access denied",
